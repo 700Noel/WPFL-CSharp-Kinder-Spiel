@@ -5,8 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Interactives_Kinder_Spiel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="1000">
     <Grid>
-        <Button x:Name="movingButton" Visibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top" Width="0" Height="0" Click="Button_Clicked" />
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="Schwierigkeit">
+                    <CheckBox Name="EasyMode" Content="Einfach" IsChecked="False" Click="ChangeMode_Easy"></CheckBox>
+                    <CheckBox Name="MediumMode" Content="Mittel" IsChecked="False" Click="ChangeMode_Medium"></CheckBox>
+                    <CheckBox Name="HardMode" Content="Schwer" IsChecked="True" Click="ChangeMode_Hard"></CheckBox>
+                </MenuItem>
+            </Menu>
+            <Button x:Name="movingButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="0" Height="0" Click="Button_Clicked" />
+        </DockPanel>
+        
     </Grid>
 </Window>
