@@ -8,5 +8,21 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Button x:Name="movingButton"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked" />
+
+        <Canvas Background="#FF8F8F8F"
+                x:Name="trafficLight"
+                Width="90"
+                Height="200"
+                Opacity="1"
+                HorizontalAlignment="Left"
+                Margin="40"
+                >
+            <Rectangle x:Name="topLight" Fill="DarkRed" Canvas.Top="15" Canvas.Left="20"
+                       RadiusX="50" RadiusY="50" Width="50" Height="50"/>
+            <Rectangle x:Name="midLight" Fill="DarkOrange" Canvas.Top="75" Canvas.Left="20"
+                       RadiusX="50" RadiusY="50" Width="50" Height="50" />
+            <Rectangle x:Name="botLight" Fill="DarkGreen" Canvas.Top="135" Canvas.Left="20"
+                       RadiusX="50" RadiusY="50" Width="50" Height="50" />
+        </Canvas>
     </Grid>
 </Window>

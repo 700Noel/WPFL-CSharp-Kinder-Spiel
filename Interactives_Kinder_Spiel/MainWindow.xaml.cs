@@ -21,7 +21,7 @@ namespace Interactives_Kinder_Spiel
         private DispatcherTimer buttonStyleTimer = new DispatcherTimer();
         private DispatcherTimer hideButtonTimer = new DispatcherTimer();
 
-        private Brush[] buttonColors = [Brushes.Green, Brushes.Yellow, Brushes.Red, Brushes.Black];
+        private Brush[] buttonColors = [Brushes.Green, Brushes.Yellow, Brushes.Red];
 
         private int previousRandomColor = -1;
 
@@ -31,12 +31,12 @@ namespace Interactives_Kinder_Spiel
         {
             InitializeComponent();
 
-            buttonStyleTimer.Interval = TimeSpan.FromSeconds(2);
+            buttonStyleTimer.Interval = TimeSpan.FromSeconds(4);
             buttonStyleTimer.Tick += OnButtonStyleTimerTick;
             buttonStyleTimer.Start();
 
 
-            hideButtonTimer.Interval = TimeSpan.FromSeconds(1); // Trigger every second
+            hideButtonTimer.Interval = TimeSpan.FromSeconds(2); // Trigger every second
             hideButtonTimer.Tick += OnHideButtonTimerTick;
             hideButtonTimer.Start();
         }
@@ -52,8 +52,8 @@ namespace Interactives_Kinder_Spiel
             Random random = new Random();
 
             // Get random width and height
-            double newWidth = random.Next(10, 50); // Between 50 and 200
-            double newHeight = random.Next(10, 50); // Between 30 and 150
+            double newWidth = random.Next(25, 60); // Between 50 and 200
+            double newHeight = random.Next(25, 60); // Between 30 and 150
 
 
             //double newLeft = random.Next(50, 300);
@@ -93,11 +93,44 @@ namespace Interactives_Kinder_Spiel
         {
             if (sender is Button colorButton)
             {
+                /*
                 // Get the ID from the Tag property
                 int id = (int)colorButton.Tag;
                 if(id == 0)
                 {
                     greenClickedCounter++;
+                }
+                */
+                changeLights(colorButton.Background);
+            }
+        }
+
+        private void changeLights(Brush color)
+        {
+            if (color != null)
+            {
+                if (color == Brushes.Red)
+                {
+                    this.topLight.Fill = Brushes.Red;
+                    this.midLight.Fill = Brushes.DarkOrange;
+                    this.botLight.Fill = Brushes.DarkGreen;
+
+                }
+                else if (color == Brushes.Yellow)
+                {
+                    this.topLight.Fill = Brushes.DarkRed;
+                    this.midLight.Fill = Brushes.Orange;
+                    this.botLight.Fill = Brushes.DarkGreen;
+                }
+                else if (color == Brushes.Green)
+                {
+                    this.topLight.Fill = Brushes.DarkRed;
+                    this.midLight.Fill = Brushes.DarkOrange;
+                    this.botLight.Fill = Brushes.Green;
+                }
+                else
+                {
+                    return;
                 }
             }
         }
