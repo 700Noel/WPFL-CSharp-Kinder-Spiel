@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics;
+using System.Drawing;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,11 +26,20 @@ namespace Interactives_Kinder_Spiel
 
         private int previousRandomColor = -1;
 
-        private int greenClickedCounter = 0;
+        private int clickedCounter = 0;
 
         private Difficulty Difficulty = Difficulty.Hard;
 
         private Dictionary<Difficulty, int[]> sizeDifficulties = new Dictionary<Difficulty, int[]>()
+        {
+            [Difficulty.Easy] = [150, 200],
+            [Difficulty.Medium] = [70, 140],
+            [Difficulty.Hard] = [20, 50]
+        };
+
+        private Stopwatch stopwatch = new Stopwatch();
+
+        private Dictionary<Difficulty, int[]> sizeDifficulties = new Dictionary<Difficulty, int[]>() 
         {
             [Difficulty.Easy] = [150, 200],
             [Difficulty.Medium] = [70, 140],
@@ -57,12 +67,12 @@ namespace Interactives_Kinder_Spiel
 
         private void OnButtonStyleTimerTick(object sender, EventArgs e)
         {
-            // Generate random position and size for the button
             Random random = new Random();
 
-            // Get random width and height
-            double newWidth = random.Next(25, 60); // Between 50 and 200
-            double newHeight = random.Next(25, 60); // Between 30 and 150
+            int[] sizeValues = sizeDifficulties[Difficulty];
+
+            double newWidth = random.Next(sizeValues[0], sizeValues[1]);
+            double newHeight = random.Next(sizeValues[0], sizeValues[1]);
 
 
             //double newLeft = random.Next(50, 300);
@@ -102,6 +112,59 @@ namespace Interactives_Kinder_Spiel
         {
             if (sender is Button colorButton)
             {
+                if (clickedCounter == 0)
+                {
+                    stopwatch.Start();
+                }
+
+                clickedCounter++;
+                pbStatus.Value = clickedCounter;
+
+                if (clickedCounter == 10)
+                {
+                    stopwatch.Stop();
+                    TimeSpan elapsed = stopwatch.Elapsed;
+
+                    MessageBox.Show($"Maximum clicks reached!\nTime taken: {elapsed.Seconds} seconds and {elapsed.Milliseconds} milliseconds.");
+
+                    clickedCounter = 0;
+                    pbStatus.Value = 0;
+                    stopwatch.Reset();
+                }
+                //// Get the ID from the Tag property
+                //int id = (int)colorButton.Tag;
+                //if(id == 0)
+                //{
+                //    greenClickedCounter++;
+                //}
+            }
+        }
+
+        private void ChangeMode_Easy(object sender, RoutedEventArgs e)
+        {
+            Difficulty = Difficulty.Easy;
+            EasyMode.IsChecked = true;
+            MediumMode.IsChecked = false;
+            HardMode.IsChecked = false;
+            e.Handled = true;
+        }
+
+        private void ChangeMode_Medium(object sender, RoutedEventArgs e)
+        {
+            Difficulty = Difficulty.Medium;
+            EasyMode.IsChecked = false;
+            MediumMode.IsChecked = true;
+            HardMode.IsChecked = false;
+            e.Handled = true;
+        }
+
+        private void ChangeMode_Hard(object sender, RoutedEventArgs e)
+        {
+            Difficulty = Difficulty.Hard;
+            EasyMode.IsChecked = false;
+            MediumMode.IsChecked = false;
+            HardMode.IsChecked = true;
+            e.Handled = true;
                 /*
                 // Get the ID from the Tag property
                 int id = (int)colorButton.Tag;
