@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics;
+using System.Drawing;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,9 +32,9 @@ namespace Interactives_Kinder_Spiel
 
         private int previousRandomColor = -1;
 
-        private int greenClickedCounter = 0;
-        private int yellowClickedCounter = 0;
-        private int redClickedCounter = 0;
+        private int clickedCounter = 0;
+
+        private Stopwatch stopwatch = new Stopwatch();
 
         private Dictionary<Difficulty, int[]> sizeDifficulties = new Dictionary<Difficulty, int[]>() 
         {
@@ -107,13 +108,24 @@ namespace Interactives_Kinder_Spiel
         {
             if (sender is Button colorButton)
             {
-                int id = (int)colorButton.Tag;
-                switch (id)
+                if (clickedCounter == 0)
                 {
-                    case BRUSHGREEN: greenClickedCounter++; break;
-                    case BRUSHRED: redClickedCounter++; break;
-                    case BRUSHYELLOW: yellowClickedCounter++; break;
-                    default: break;
+                    stopwatch.Start();
+                }
+
+                clickedCounter++;
+                pbStatus.Value = clickedCounter;
+
+                if (clickedCounter == 10)
+                {
+                    stopwatch.Stop();
+                    TimeSpan elapsed = stopwatch.Elapsed;
+
+                    MessageBox.Show($"Maximum clicks reached!\nTime taken: {elapsed.Seconds} seconds and {elapsed.Milliseconds} milliseconds.");
+
+                    clickedCounter = 0;
+                    pbStatus.Value = 0;
+                    stopwatch.Reset();
                 }
             }
         }
