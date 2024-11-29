@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <ProgressBar Minimum="0" Maximum="10" Name="pbStatus" 
+                 HorizontalAlignment="Stretch" VerticalAlignment="Top" 
+                 Height="20" Margin="10" />
         <Button x:Name="movingButton"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked" />
     </Grid>
 </Window>
