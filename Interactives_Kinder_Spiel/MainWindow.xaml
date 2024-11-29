@@ -15,8 +15,7 @@
                     <CheckBox Name="HardMode" Content="Schwer" IsChecked="True" Click="ChangeMode_Hard"></CheckBox>
                 </MenuItem>
             </Menu>
-                  <ProgressBar Minimum="0" Maximum="10" Name="pbStatus" 
-                 HorizontalAlignment="Stretch" VerticalAlignment="Top" 
+            <ProgressBar DockPanel.Dock="Top" Minimum="0" Maximum="10" Name="pbStatus"
                  Height="20" Margin="10" />
             <Button x:Name="movingButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="0" Height="0" Click="Button_Clicked" />
         </DockPanel>
