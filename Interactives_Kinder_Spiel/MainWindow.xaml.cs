@@ -22,6 +22,8 @@ namespace Interactives_Kinder_Spiel
         private DispatcherTimer buttonStyleTimer = new DispatcherTimer();
         private DispatcherTimer hideButtonTimer = new DispatcherTimer();
 
+        private Difficulty Difficulty = Difficulty.Hard;
+
         private Brush[] buttonColors = [Brushes.Green, Brushes.Yellow, Brushes.Red, Brushes.Black];
 
         private int previousRandomColor = -1;
@@ -29,6 +31,13 @@ namespace Interactives_Kinder_Spiel
         private int clickedCounter = 0;
 
         private Stopwatch stopwatch = new Stopwatch();
+
+        private Dictionary<Difficulty, int[]> sizeDifficulties = new Dictionary<Difficulty, int[]>() 
+        {
+            [Difficulty.Easy] = [150, 200],
+            [Difficulty.Medium] = [70, 140],
+            [Difficulty.Hard] = [20, 50]
+        };
 
         public MainWindow()
         {
@@ -51,12 +60,12 @@ namespace Interactives_Kinder_Spiel
 
         private void OnButtonStyleTimerTick(object sender, EventArgs e)
         {
-            // Generate random position and size for the button
             Random random = new Random();
 
-            // Get random width and height
-            double newWidth = random.Next(10, 50); // Between 50 and 200
-            double newHeight = random.Next(10, 50); // Between 30 and 150
+            int[] sizeValues = sizeDifficulties[Difficulty];
+
+            double newWidth = random.Next(sizeValues[0], sizeValues[1]);
+            double newHeight = random.Next(sizeValues[0], sizeValues[1]);
 
 
             //double newLeft = random.Next(50, 300);
@@ -122,6 +131,33 @@ namespace Interactives_Kinder_Spiel
                 //    greenClickedCounter++;
                 //}
             }
+        }
+
+        private void ChangeMode_Easy(object sender, RoutedEventArgs e)
+        {
+            Difficulty = Difficulty.Easy;
+            EasyMode.IsChecked = true;
+            MediumMode.IsChecked = false;
+            HardMode.IsChecked = false;
+            e.Handled = true;
+        }
+
+        private void ChangeMode_Medium(object sender, RoutedEventArgs e)
+        {
+            Difficulty = Difficulty.Medium;
+            EasyMode.IsChecked = false;
+            MediumMode.IsChecked = true;
+            HardMode.IsChecked = false;
+            e.Handled = true;
+        }
+
+        private void ChangeMode_Hard(object sender, RoutedEventArgs e)
+        {
+            Difficulty = Difficulty.Hard;
+            EasyMode.IsChecked = false;
+            MediumMode.IsChecked = false;
+            HardMode.IsChecked = true;
+            e.Handled = true;
         }
     }
 }
