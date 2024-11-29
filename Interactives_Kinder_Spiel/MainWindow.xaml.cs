@@ -27,6 +27,15 @@ namespace Interactives_Kinder_Spiel
 
         private int greenClickedCounter = 0;
 
+        private Difficulty Difficulty = Difficulty.Hard;
+
+        private Dictionary<Difficulty, int[]> sizeDifficulties = new Dictionary<Difficulty, int[]>()
+        {
+            [Difficulty.Easy] = [150, 200],
+            [Difficulty.Medium] = [70, 140],
+            [Difficulty.Hard] = [20, 50]
+        };
+
         public MainWindow()
         {
             InitializeComponent();

@@ -7,22 +7,35 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button x:Name="movingButton"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked" />
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="Schwierigkeit">
+                    <CheckBox Name="EasyMode" Content="Einfach" IsChecked="False" Click="ChangeMode_Easy"></CheckBox>
+                    <CheckBox Name="MediumMode" Content="Mittel" IsChecked="False" Click="ChangeMode_Medium"></CheckBox>
+                    <CheckBox Name="HardMode" Content="Schwer" IsChecked="True" Click="ChangeMode_Hard"></CheckBox>
+                </MenuItem>
+                <MenuItem Header="Spielmodus">
+                    <CheckBox Name="TrafficLight" Content="Ampel Po Pampel" IsChecked="True" Click="ChangeGame_Traffic" />
+                    <CheckBox Name="OtherGame" Content="Nicht Implementiert" IsChecked="False" Click="ChangeGame_Other" />
+                </MenuItem>
+            </Menu>
+            <Button x:Name="movingButton"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked" />
 
-        <Canvas Background="#FF8F8F8F"
-                x:Name="trafficLight"
-                Width="90"
-                Height="200"
-                Opacity="1"
-                HorizontalAlignment="Left"
-                Margin="40"
-                >
-            <Rectangle x:Name="topLight" Fill="DarkRed" Canvas.Top="15" Canvas.Left="20"
-                       RadiusX="50" RadiusY="50" Width="50" Height="50"/>
-            <Rectangle x:Name="midLight" Fill="DarkOrange" Canvas.Top="75" Canvas.Left="20"
-                       RadiusX="50" RadiusY="50" Width="50" Height="50" />
-            <Rectangle x:Name="botLight" Fill="DarkGreen" Canvas.Top="135" Canvas.Left="20"
-                       RadiusX="50" RadiusY="50" Width="50" Height="50" />
-        </Canvas>
+            <Canvas Background="#FF8F8F8F"
+        x:Name="trafficLight"
+        Width="90"
+        Height="200"
+        Opacity="1"
+        HorizontalAlignment="Left"
+        Margin="40"
+        >
+                <Rectangle x:Name="topLight" Fill="DarkRed" Canvas.Top="15" Canvas.Left="20"
+               RadiusX="50" RadiusY="50" Width="50" Height="50"/>
+                <Rectangle x:Name="midLight" Fill="DarkOrange" Canvas.Top="75" Canvas.Left="20"
+               RadiusX="50" RadiusY="50" Width="50" Height="50" />
+                <Rectangle x:Name="botLight" Fill="DarkGreen" Canvas.Top="135" Canvas.Left="20"
+               RadiusX="50" RadiusY="50" Width="50" Height="50" />
+            </Canvas>
+        </DockPanel>
     </Grid>
 </Window>
