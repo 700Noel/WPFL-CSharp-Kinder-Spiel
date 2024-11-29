@@ -23,11 +23,17 @@ namespace Interactives_Kinder_Spiel
 
         private Difficulty Difficulty = Difficulty.Hard;
 
-        private Brush[] buttonColors = [Brushes.Green, Brushes.Yellow, Brushes.Red, Brushes.Black];
+        private Brush[] buttonColors = [Brushes.Green, Brushes.Yellow, Brushes.Red];
+
+        private const int BRUSHGREEN = 0;
+        private const int BRUSHYELLOW = 1;
+        private const int BRUSHRED = 2;
 
         private int previousRandomColor = -1;
 
         private int greenClickedCounter = 0;
+        private int yellowClickedCounter = 0;
+        private int redClickedCounter = 0;
 
         private Dictionary<Difficulty, int[]> sizeDifficulties = new Dictionary<Difficulty, int[]>() 
         {
@@ -63,7 +69,6 @@ namespace Interactives_Kinder_Spiel
 
             double newWidth = random.Next(sizeValues[0], sizeValues[1]);
             double newHeight = random.Next(sizeValues[0], sizeValues[1]);
-
 
             //double newLeft = random.Next(50, 300);
             //double newTop = random.Next(30, 300);
@@ -102,11 +107,13 @@ namespace Interactives_Kinder_Spiel
         {
             if (sender is Button colorButton)
             {
-                // Get the ID from the Tag property
                 int id = (int)colorButton.Tag;
-                if(id == 0)
+                switch (id)
                 {
-                    greenClickedCounter++;
+                    case BRUSHGREEN: greenClickedCounter++; break;
+                    case BRUSHRED: redClickedCounter++; break;
+                    case BRUSHYELLOW: yellowClickedCounter++; break;
+                    default: break;
                 }
             }
         }
