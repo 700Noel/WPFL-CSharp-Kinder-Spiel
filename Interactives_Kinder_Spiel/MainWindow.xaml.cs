@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics;
+using System.Drawing;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,7 +28,9 @@ namespace Interactives_Kinder_Spiel
 
         private int previousRandomColor = -1;
 
-        private int greenClickedCounter = 0;
+        private int clickedCounter = 0;
+
+        private Stopwatch stopwatch = new Stopwatch();
 
         private Dictionary<Difficulty, int[]> sizeDifficulties = new Dictionary<Difficulty, int[]>() 
         {
@@ -102,12 +105,31 @@ namespace Interactives_Kinder_Spiel
         {
             if (sender is Button colorButton)
             {
-                // Get the ID from the Tag property
-                int id = (int)colorButton.Tag;
-                if(id == 0)
+                if (clickedCounter == 0)
                 {
-                    greenClickedCounter++;
+                    stopwatch.Start();
                 }
+
+                clickedCounter++;
+                pbStatus.Value = clickedCounter;
+
+                if (clickedCounter == 10)
+                {
+                    stopwatch.Stop();
+                    TimeSpan elapsed = stopwatch.Elapsed;
+
+                    MessageBox.Show($"Maximum clicks reached!\nTime taken: {elapsed.Seconds} seconds and {elapsed.Milliseconds} milliseconds.");
+
+                    clickedCounter = 0;
+                    pbStatus.Value = 0;
+                    stopwatch.Reset();
+                }
+                //// Get the ID from the Tag property
+                //int id = (int)colorButton.Tag;
+                //if(id == 0)
+                //{
+                //    greenClickedCounter++;
+                //}
             }
         }
 
