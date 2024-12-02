@@ -22,13 +22,13 @@ namespace Interactives_Kinder_Spiel
         private DispatcherTimer buttonStyleTimer = new DispatcherTimer();
         private DispatcherTimer hideButtonTimer = new DispatcherTimer();
 
-        private Brush[] buttonColors = [Brushes.Green, Brushes.Yellow, Brushes.Red];
+        private Brush[] buttonColors = [Brushes.Green, Brushes.Orange, Brushes.Red];
 
         private int previousRandomColor = -1;
 
         private int clickedCounter = 0;
 
-        private String gameMode;
+        private String gameMode = "TrafficLight";
 
         private Brush currentColor;
 
@@ -61,7 +61,9 @@ namespace Interactives_Kinder_Spiel
         {
             if (gameMode == "TrafficLight")
             {
-                movingButton_Red.Visibility = movingButton_Red.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
+				movingButton.Visibility = movingButton.Visibility == Visibility.Hidden ? Visibility.Collapsed : Visibility.Collapsed;
+
+				movingButton_Red.Visibility = movingButton_Red.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
                 movingButton_Orange.Visibility = movingButton_Orange.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
                 movingButton_Green.Visibility = movingButton_Green.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
             }
@@ -83,10 +85,16 @@ namespace Interactives_Kinder_Spiel
                 double newHeight = random.Next(sizeValues[0], sizeValues[1]);
 
                 // Apply the new size and position
-                movingButton.Width = newWidth;
-                movingButton.Height = newHeight;
+                movingButton_Red.Width = newWidth;
+                movingButton_Red.Height = newHeight;
 
-                double newLeft1 = random.Next(300, 620);
+				movingButton_Orange.Width = newWidth;
+				movingButton_Orange.Height = newHeight;
+
+				movingButton_Green.Width = newWidth;
+				movingButton_Green.Height = newHeight;
+
+				double newLeft1 = random.Next(300, 620);
                 double newTop1 = random.Next(50, 300);
 
                 double newLeft2 = random.Next(300, 620);
@@ -141,8 +149,8 @@ namespace Interactives_Kinder_Spiel
                 movingButton.Width = newWidth;
                 movingButton.Height = newHeight;
 
-                double newLeft = random.Next(300, 620);
-                double newTop = random.Next(50, 300);
+                double newLeft = random.Next(150, 400);
+                double newTop = random.Next(30, 180);
 
                 movingButton.Margin = new Thickness(newLeft, newTop, 0, 0);
 
@@ -214,20 +222,35 @@ namespace Interactives_Kinder_Spiel
             {
                 if (this.currentColor == colorButton.Background)
                 {
+                    TestBox.Text = "ROOOOOT";
 
-                }
+				}
             }
         }
 
         private void Button_Clicked_Orange(object sender, RoutedEventArgs e)
         {
+			if (sender is Button colorButton)
+			{
+				if (this.currentColor == colorButton.Background)
+				{
+					TestBox.Text = "OLOOONGE";
 
-        }
+				}
+			}
+		}
 
         private void Button_Clicked_Green(object sender, RoutedEventArgs e)
         {
+			if (sender is Button colorButton)
+			{
+				if (this.currentColor == colorButton.Background)
+				{
+					TestBox.Text = "GREEEN";
 
-        }
+				}
+			}
+		}
 
         private void ChangeMode_Easy(object sender, RoutedEventArgs e)
         {
