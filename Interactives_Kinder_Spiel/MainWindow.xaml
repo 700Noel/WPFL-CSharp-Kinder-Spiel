@@ -6,18 +6,37 @@
         xmlns:local="clr-namespace:Interactives_Kinder_Spiel"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="1000">
-    <Grid>
+    <Grid Background="RosyBrown">
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="Schwierigkeit">
-                    <CheckBox Name="EasyMode" Content="Einfach" IsChecked="False" Click="ChangeMode_Easy"></CheckBox>
-                    <CheckBox Name="MediumMode" Content="Mittel" IsChecked="False" Click="ChangeMode_Medium"></CheckBox>
-                    <CheckBox Name="HardMode" Content="Schwer" IsChecked="True" Click="ChangeMode_Hard"></CheckBox>
+                    <CheckBox x:Name="EasyMode" Content="Einfach" IsChecked="False" Click="ChangeMode_Easy"></CheckBox>
+                    <CheckBox x:Name="MediumMode" Content="Mittel" IsChecked="False" Click="ChangeMode_Medium"></CheckBox>
+                    <CheckBox x:Name="HardMode" Content="Schwer" IsChecked="True" Click="ChangeMode_Hard"></CheckBox>
                 </MenuItem>
             </Menu>
             <ProgressBar DockPanel.Dock="Top" Minimum="0" Maximum="10" Name="pbStatus"
-                 Height="20" Margin="10" />
-            <Button x:Name="movingButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="0" Height="0" Click="Button_Clicked" />
-        </DockPanel>
+                         Height="20" Margin="10" />
+
+            <Canvas Background="#FF8F8F8F"
+                    x:Name="trafficLight"
+                    Width="90"
+                    Height="200"
+                    Opacity="1"
+                    HorizontalAlignment="Left"
+                    Margin="40" >
+                <Rectangle x:Name="topLight" Fill="DarkRed" Canvas.Top="15" Canvas.Left="20"
+                           RadiusX="50" RadiusY="50" Width="50" Height="50" />
+                <Rectangle x:Name="midLight" Fill="DarkGoldenrod" Canvas.Top="75" Canvas.Left="20"
+                           RadiusX="50" RadiusY="50" Width="50" Height="50" />
+                <Rectangle x:Name="botLight" Fill="DarkGreen" Canvas.Top="135" Canvas.Left="20"
+                           RadiusX="50" RadiusY="50" Width="50" Height="50" />
+            </Canvas>
+			<StackPanel x:Name="TabPanel">
+                <Button x:Name="movingButton_Red" Background="Red" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked_Red" Visibility="Hidden"/>
+                <Button x:Name="movingButton_Orange" Background="Yellow" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked_Orange" Visibility="Hidden" />
+                <Button x:Name="movingButton_Green" Background="LightGreen" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked_Green" Visibility="Hidden" />
+			</StackPanel>
+		</DockPanel>
     </Grid>
 </Window>
