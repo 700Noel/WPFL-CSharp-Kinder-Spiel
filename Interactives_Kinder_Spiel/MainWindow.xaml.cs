@@ -258,6 +258,47 @@ namespace Interactives_Kinder_Spiel
             e.Handled = true;
         }
 
+        private void ChangeGoal(object sender, RoutedEventArgs e)
+        {
+            CheckBox check = sender as CheckBox;
+            if (check != null)
+            {
+                if (double.TryParse(check.Content.ToString(), out double goal))
+                {
+                    pbStatus.Maximum = goal;
+                    pbStatus.Value = 0;
+
+                    switch (goal)
+                    {
+                        case 10:
+                            Goal10.IsChecked = true;
+                            Goal20.IsChecked = false;
+                            Goal50.IsChecked = false;
+                            Goal100.IsChecked = false;
+                            break;
+                        case 20:
+                            Goal10.IsChecked = false;
+                            Goal20.IsChecked = true;
+                            Goal50.IsChecked = false;
+                            Goal100.IsChecked = false;
+                            break;
+                        case 50:
+                            Goal10.IsChecked = false;
+                            Goal20.IsChecked = false;
+                            Goal50.IsChecked = true;
+                            Goal100.IsChecked = false;
+                            break;
+                        case 100:
+                            Goal10.IsChecked = false;
+                            Goal20.IsChecked = false;
+                            Goal50.IsChecked = false;
+                            Goal100.IsChecked = true;
+                            break;
+                    }
+                }
+            }
+
+
         private void ChangeGame_Traffic()
         {
             this.gameMode = "TrafficLight";
