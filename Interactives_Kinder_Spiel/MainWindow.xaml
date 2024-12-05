@@ -19,7 +19,8 @@
                     <CheckBox Name="OtherGame" Content="Nicht Implementiert" IsChecked="False" Click="ChangeGame_Other" />
                 </MenuItem>
             </Menu>
-            
+            <ProgressBar DockPanel.Dock="Top" Minimum="0" Maximum="10" Name="pbStatus"
+                         Height="20" Margin="10" />
 
             <Canvas Background="#FF8F8F8F"
                     x:Name="trafficLight"
