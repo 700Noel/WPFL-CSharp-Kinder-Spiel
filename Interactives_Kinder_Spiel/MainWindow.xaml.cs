@@ -21,8 +21,11 @@ namespace Interactives_Kinder_Spiel
     {
         private DispatcherTimer buttonStyleTimer = new DispatcherTimer();
         private DispatcherTimer hideButtonTimer = new DispatcherTimer();
+        private DispatcherTimer gameTimer = new DispatcherTimer();
 
-        private Brush[] buttonColors = [Brushes.Green, Brushes.Orange, Brushes.Red];
+        private int gameTick = 0;
+
+        private Brush[] buttonColors = [Brushes.Green, Brushes.Goldenrod, Brushes.Red];
 
         private int previousRandomColor = -1;
 
@@ -36,9 +39,9 @@ namespace Interactives_Kinder_Spiel
 
         private Dictionary<Difficulty, int[]> sizeDifficulties = new Dictionary<Difficulty, int[]>()
         {
-            [Difficulty.Easy] = [150, 200],
-            [Difficulty.Medium] = [70, 140],
-            [Difficulty.Hard] = [20, 50]
+            [Difficulty.Easy] = [120, 180],
+            [Difficulty.Medium] = [60, 120],
+            [Difficulty.Hard] = [30, 60]
         };
 
         private Stopwatch stopwatch = new Stopwatch();
@@ -46,15 +49,31 @@ namespace Interactives_Kinder_Spiel
         public MainWindow()
         {
             InitializeComponent();
+            gameTimer.Interval = TimeSpan.FromSeconds(2);
+            gameTimer.Tick += new EventHandler(dispatcherTimer_Tick); //OnGameTimerTick;
 
-            buttonStyleTimer.Interval = TimeSpan.FromSeconds(4);
+            buttonStyleTimer.Interval = TimeSpan.FromSeconds(2);
             buttonStyleTimer.Tick += OnButtonStyleTimerTick;
             buttonStyleTimer.Start();
 
 
-            hideButtonTimer.Interval = TimeSpan.FromSeconds(2); // Trigger every second
+            hideButtonTimer.Interval = TimeSpan.FromSeconds(1); // Trigger every second
             hideButtonTimer.Tick += OnHideButtonTimerTick;
             hideButtonTimer.Start();
+        }
+
+        private void OnGameTimerTick(object sender, EventArgs e)
+        {
+            OnHideButtonTimerTick(sender, e);
+            OnButtonStyleTimerTick(sender, e);
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            if (sender is DispatcherTimer timer)
+            {
+                gameTick++;
+            }
         }
 
         private void OnHideButtonTimerTick(object sender, EventArgs e)
@@ -94,14 +113,14 @@ namespace Interactives_Kinder_Spiel
 				movingButton_Green.Width = newWidth;
 				movingButton_Green.Height = newHeight;
 
-				double newLeft1 = random.Next(300, 620);
-                double newTop1 = random.Next(50, 300);
+				double newLeft1 = random.Next(100, 300);
+                double newTop1 = random.Next(50, 150);
 
-                double newLeft2 = random.Next(300, 620);
-                double newTop2 = random.Next(50, 300);
+                double newLeft2 = random.Next(100, 300);
+                double newTop2 = random.Next(50, 150);
 
-                double newLeft3 = random.Next(300, 620);
-                double newTop3 = random.Next(50, 300);
+                double newLeft3 = random.Next(100, 300);
+                double newTop3 = random.Next(50, 150);
 
                 movingButton_Red.Margin = new Thickness(newLeft1, newTop1, 0, 0);
                 movingButton_Orange.Margin = new Thickness(newLeft2, newTop2, 0, 0);
@@ -225,6 +244,10 @@ namespace Interactives_Kinder_Spiel
                     TestBox.Text = "ROOOOOT";
 
 				}
+                else
+                {
+                    TestBox.Text = "FALSCH";
+                }
             }
         }
 
@@ -232,11 +255,15 @@ namespace Interactives_Kinder_Spiel
         {
 			if (sender is Button colorButton)
 			{
-				if (this.currentColor == colorButton.Background)
-				{
-					TestBox.Text = "OLOOONGE";
+                if (this.currentColor == colorButton.Background)
+                {
+                    TestBox.Text = "OLOOONGE";
 
-				}
+                }
+                else
+                {
+                    TestBox.Text = "FALSCH";
+                }
 			}
 		}
 
@@ -249,7 +276,11 @@ namespace Interactives_Kinder_Spiel
 					TestBox.Text = "GREEEN";
 
 				}
-			}
+                else
+                {
+                    TestBox.Text = "FALSCH";
+                }
+            }
 		}
 
         private void ChangeMode_Easy(object sender, RoutedEventArgs e)
@@ -286,6 +317,15 @@ namespace Interactives_Kinder_Spiel
             this.movingButton_Orange.Visibility = Visibility.Visible;
             this.movingButton_Green.Visibility = Visibility.Visible;
             this.movingButton.Visibility = Visibility.Collapsed;
+
+            gameTimer.Start();
+
+            buttonStyleTimer.Stop();
+            hideButtonTimer.Stop();
+
+            e.Handled = true;
+
+
         }
 
         private void ChangeGame_Other(object sender, RoutedEventArgs e)
@@ -295,30 +335,36 @@ namespace Interactives_Kinder_Spiel
             this.movingButton_Orange.Visibility = Visibility.Collapsed;
             this.movingButton_Green.Visibility = Visibility.Collapsed;
             this.movingButton.Visibility = Visibility.Visible;
+            buttonStyleTimer.Start();
+            hideButtonTimer.Start();
+
+            gameTimer.Stop();
+
+            e.Handled = true;
         }
 
         private void changeLights(Brush color)
         {
-            if (color != null)
+            if (color != null && gameTick % 2 == 0)
             {
                 if (color == Brushes.Red)
                 {
                     this.topLight.Fill = Brushes.Red;
-                    this.midLight.Fill = Brushes.DarkOrange;
+                    this.midLight.Fill = Brushes.DarkGoldenrod;
                     this.botLight.Fill = Brushes.DarkGreen;
 
                 }
                 else if (color == Brushes.Yellow)
                 {
                     this.topLight.Fill = Brushes.DarkRed;
-                    this.midLight.Fill = Brushes.Orange;
+                    this.midLight.Fill = Brushes.Goldenrod;
                     this.botLight.Fill = Brushes.DarkGreen;
                 }
                 else if (color == Brushes.Green)
                 {
                     this.topLight.Fill = Brushes.DarkRed;
-                    this.midLight.Fill = Brushes.DarkOrange;
-                    this.botLight.Fill = Brushes.Green;
+                    this.midLight.Fill = Brushes.DarkGoldenrod;
+                    this.botLight.Fill = Brushes.LightGreen;
                 }
                 else
                 {
