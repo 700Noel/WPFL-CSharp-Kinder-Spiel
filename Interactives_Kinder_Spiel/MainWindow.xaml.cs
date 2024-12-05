@@ -50,7 +50,7 @@ namespace Interactives_Kinder_Spiel
         {
             InitializeComponent();
             gameTimer.Interval = TimeSpan.FromSeconds(2);
-            gameTimer.Tick += new EventHandler(dispatcherTimer_Tick); //OnGameTimerTick;
+            gameTimer.Tick += OnGameTimerTick;
 
             buttonStyleTimer.Interval = TimeSpan.FromSeconds(2);
             buttonStyleTimer.Tick += OnButtonStyleTimerTick;
@@ -64,77 +64,67 @@ namespace Interactives_Kinder_Spiel
 
         private void OnGameTimerTick(object sender, EventArgs e)
         {
-            
+            dispatcherTimer_Tick();
         }
 
-        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        private void dispatcherTimer_Tick() //object sender, EventArgs e
         {
-            if (sender is DispatcherTimer timer)
+            gameTick++;
+
+            // Hiding of Buttons
+            movingButton.Visibility = movingButton.Visibility == Visibility.Hidden ? Visibility.Collapsed : Visibility.Collapsed;
+            movingButton_Red.Visibility = movingButton_Red.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
+            movingButton_Orange.Visibility = movingButton_Orange.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
+            movingButton_Green.Visibility = movingButton_Green.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
+
+            //Change the Appearence
+            Random random = new Random();
+
+            int[] sizeValues = sizeDifficulties[Difficulty];
+
+            double newWidth = random.Next(sizeValues[0], sizeValues[1]);
+            double newHeight = random.Next(sizeValues[0], sizeValues[1]);
+
+            // Apply the new size and position
+            movingButton_Red.Width = newWidth;
+            movingButton_Red.Height = newHeight;
+
+            movingButton_Orange.Width = newWidth;
+            movingButton_Orange.Height = newHeight;
+
+            movingButton_Green.Width = newWidth;
+            movingButton_Green.Height = newHeight;
+
+            double newLeft1 = random.Next(100, 350);
+            double newTop1 = random.Next(50, 130);
+
+            double newLeft2 = random.Next(100, 350);
+            double newTop2 = random.Next(50, 130);
+
+            double newLeft3 = random.Next(100, 350);
+            double newTop3 = random.Next(50, 130);
+
+            double[] xPositions = [newLeft1, newLeft2, newLeft3];
+            double[] yPositions = [newTop1, newTop2, newTop3];
+
+            // Assign new Button Positions
+            assign_New_Positions(xPositions, yPositions, random);
+
+            int randomColorIndex = random.Next(0, buttonColors.Length);
+
+            if (randomColorIndex == previousRandomColor)
             {
-                gameTick++;
-
-                // Hiding of Buttons
-                movingButton.Visibility = movingButton.Visibility == Visibility.Hidden ? Visibility.Collapsed : Visibility.Collapsed;
-                movingButton_Red.Visibility = movingButton_Red.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
-                movingButton_Orange.Visibility = movingButton_Orange.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
-                movingButton_Green.Visibility = movingButton_Green.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
-
-                //Change the Appearence
-                Random random = new Random();
-
-                int[] sizeValues = sizeDifficulties[Difficulty];
-
-                double newWidth = random.Next(sizeValues[0], sizeValues[1]);
-                double newHeight = random.Next(sizeValues[0], sizeValues[1]);
-
-                // Apply the new size and position
-                movingButton_Red.Width = newWidth;
-                movingButton_Red.Height = newHeight;
-
-                movingButton_Orange.Width = newWidth;
-                movingButton_Orange.Height = newHeight;
-
-                movingButton_Green.Width = newWidth;
-                movingButton_Green.Height = newHeight;
-
-                double newLeft1 = random.Next(100, 300);
-                double newTop1 = random.Next(50, 150);
-
-                double newLeft2 = random.Next(100, 300);
-                double newTop2 = random.Next(50, 150);
-
-                double newLeft3 = random.Next(100, 300);
-                double newTop3 = random.Next(50, 150);
-
-                double[] xPositions = [newLeft1, newLeft2, newLeft3];
-                double[] yPositions = [newTop1, newTop2, newTop3];
-
-
-                assign_New_Positions(xPositions, yPositions, random);
-
-                int randomColorIndex = random.Next(0, buttonColors.Length);
-
-                if (randomColorIndex == previousRandomColor)
+                if (randomColorIndex == buttonColors.Length - 1)
                 {
-                    if (randomColorIndex == buttonColors.Length - 1)
-                    {
-                        randomColorIndex--;
-                    }
-                    else
-                    {
-                        randomColorIndex++;
-                    }
+                    randomColorIndex--;
                 }
-                /*
-                previousRandomColor = randomColorIndex;
-
-                movingButton.Background = buttonColors[randomColorIndex];
-                movingButton.Tag = randomColorIndex;
-                */
-
-                changeLights(buttonColors[randomColorIndex]);
-                this.currentColor = buttonColors[randomColorIndex];
+                else
+                {
+                    randomColorIndex++;
+                }
             }
+            changeLights(buttonColors[randomColorIndex]);
+            this.currentColor = buttonColors[randomColorIndex];
         }
 
         private void OnHideButtonTimerTick(object sender, EventArgs e)
@@ -223,7 +213,7 @@ namespace Interactives_Kinder_Spiel
                 }
 
                 clickedCounter++;
-                //pbStatus.Value = clickedCounter;
+                pbStatus.Value = clickedCounter;
 
                 if (clickedCounter == 10)
                 {
@@ -233,7 +223,7 @@ namespace Interactives_Kinder_Spiel
                     MessageBox.Show($"Maximum clicks reached!\nTime taken: {elapsed.Seconds} seconds and {elapsed.Milliseconds} milliseconds.");
 
                     clickedCounter = 0;
-                    //pbStatus.Value = 0;
+                    pbStatus.Value = 0;
                     stopwatch.Reset();
                 }
 
@@ -256,8 +246,9 @@ namespace Interactives_Kinder_Spiel
                 if (this.currentColor == colorButton.Background)
                 {
                     TestBox.Text = "ROOOOOT";
+                    correct_Button_Pressed();
 
-				}
+                }
                 else
                 {
                     TestBox.Text = "FALSCH";
@@ -272,7 +263,7 @@ namespace Interactives_Kinder_Spiel
                 if (this.currentColor == colorButton.Background)
                 {
                     TestBox.Text = "OLOOONGE";
-
+                    correct_Button_Pressed();
                 }
                 else
                 {
@@ -288,14 +279,38 @@ namespace Interactives_Kinder_Spiel
 				if (this.currentColor == colorButton.Background)
 				{
 					TestBox.Text = "GREEEN";
-
-				}
+                    correct_Button_Pressed();
+                }
                 else
                 {
                     TestBox.Text = "FALSCH";
                 }
             }
 		}
+
+        private void correct_Button_Pressed()
+        {
+            if (clickedCounter == 0)
+            {
+                stopwatch.Start();
+            }
+
+            clickedCounter++;
+            pbStatus.Value = clickedCounter;
+            dispatcherTimer_Tick();
+
+            if (clickedCounter == 10)
+            {
+                stopwatch.Stop();
+                TimeSpan elapsed = stopwatch.Elapsed;
+
+                MessageBox.Show($"Maximum clicks reached!\nTime taken: {elapsed.Seconds} seconds and {elapsed.Milliseconds} milliseconds.");
+
+                clickedCounter = 0;
+                pbStatus.Value = 0;
+                stopwatch.Reset();
+            }
+        }
 
         private void ChangeMode_Easy(object sender, RoutedEventArgs e)
         {
@@ -359,6 +374,7 @@ namespace Interactives_Kinder_Spiel
 
         private void changeLights(Brush color)
         {
+            // Only change the Lights after every second gameTick
             if (color != null && gameTick % 2 == 0)
             {
                 if (color == Brushes.Red)
