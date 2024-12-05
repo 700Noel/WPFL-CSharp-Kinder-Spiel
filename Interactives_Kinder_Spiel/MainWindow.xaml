@@ -14,6 +14,12 @@
                     <CheckBox Name="MediumMode" Content="Mittel" IsChecked="False" Click="ChangeMode_Medium"></CheckBox>
                     <CheckBox Name="HardMode" Content="Schwer" IsChecked="True" Click="ChangeMode_Hard"></CheckBox>
                 </MenuItem>
+                <MenuItem Header="Goal">
+                    <CheckBox Name="Goal10" Content="10" IsChecked="True" Click="ChangeGoal"></CheckBox>
+                    <CheckBox Name="Goal20" Content="20" IsChecked="False" Click="ChangeGoal"></CheckBox>
+                    <CheckBox Name="Goal50" Content="50" IsChecked="False" Click="ChangeGoal"></CheckBox>
+                    <CheckBox Name="Goal100" Content="100" IsChecked="False" Click="ChangeGoal"></CheckBox>
+                </MenuItem>
             </Menu>
             <ProgressBar DockPanel.Dock="Top" Minimum="0" Maximum="10" Name="pbStatus"
                  Height="20" Margin="10" />
