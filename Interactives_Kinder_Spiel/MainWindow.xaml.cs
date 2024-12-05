@@ -25,7 +25,7 @@ namespace Interactives_Kinder_Spiel
 
         private int gameTick = 0;
 
-        private Brush[] buttonColors = [Brushes.Green, Brushes.Goldenrod, Brushes.Red];
+        private Brush[] buttonColors = [Brushes.LightGreen, Brushes.Goldenrod, Brushes.Red];
 
         private int previousRandomColor = -1;
 
@@ -54,18 +54,17 @@ namespace Interactives_Kinder_Spiel
 
             buttonStyleTimer.Interval = TimeSpan.FromSeconds(2);
             buttonStyleTimer.Tick += OnButtonStyleTimerTick;
-            buttonStyleTimer.Start();
+            //buttonStyleTimer.Start();
 
 
             hideButtonTimer.Interval = TimeSpan.FromSeconds(1); // Trigger every second
             hideButtonTimer.Tick += OnHideButtonTimerTick;
-            hideButtonTimer.Start();
+            //hideButtonTimer.Start();
         }
 
         private void OnGameTimerTick(object sender, EventArgs e)
         {
-            OnHideButtonTimerTick(sender, e);
-            OnButtonStyleTimerTick(sender, e);
+            
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
@@ -73,29 +72,14 @@ namespace Interactives_Kinder_Spiel
             if (sender is DispatcherTimer timer)
             {
                 gameTick++;
-            }
-        }
 
-        private void OnHideButtonTimerTick(object sender, EventArgs e)
-        {
-            if (gameMode == "TrafficLight")
-            {
-				movingButton.Visibility = movingButton.Visibility == Visibility.Hidden ? Visibility.Collapsed : Visibility.Collapsed;
-
-				movingButton_Red.Visibility = movingButton_Red.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
+                // Hiding of Buttons
+                movingButton.Visibility = movingButton.Visibility == Visibility.Hidden ? Visibility.Collapsed : Visibility.Collapsed;
+                movingButton_Red.Visibility = movingButton_Red.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
                 movingButton_Orange.Visibility = movingButton_Orange.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
                 movingButton_Green.Visibility = movingButton_Green.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
-            }
-            else if (gameMode == "Other")
-            {
-                movingButton.Visibility = movingButton.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
-            }
-        }
 
-        private void OnButtonStyleTimerTick(object sender, EventArgs e)
-        {
-            if (gameMode == "TrafficLight")
-            {
+                //Change the Appearence
                 Random random = new Random();
 
                 int[] sizeValues = sizeDifficulties[Difficulty];
@@ -107,13 +91,13 @@ namespace Interactives_Kinder_Spiel
                 movingButton_Red.Width = newWidth;
                 movingButton_Red.Height = newHeight;
 
-				movingButton_Orange.Width = newWidth;
-				movingButton_Orange.Height = newHeight;
+                movingButton_Orange.Width = newWidth;
+                movingButton_Orange.Height = newHeight;
 
-				movingButton_Green.Width = newWidth;
-				movingButton_Green.Height = newHeight;
+                movingButton_Green.Width = newWidth;
+                movingButton_Green.Height = newHeight;
 
-				double newLeft1 = random.Next(100, 300);
+                double newLeft1 = random.Next(100, 300);
                 double newTop1 = random.Next(50, 150);
 
                 double newLeft2 = random.Next(100, 300);
@@ -122,10 +106,11 @@ namespace Interactives_Kinder_Spiel
                 double newLeft3 = random.Next(100, 300);
                 double newTop3 = random.Next(50, 150);
 
-                movingButton_Red.Margin = new Thickness(newLeft1, newTop1, 0, 0);
-                movingButton_Orange.Margin = new Thickness(newLeft2, newTop2, 0, 0);
-                movingButton_Green.Margin = new Thickness(newLeft3, newTop3, 0, 0);
+                double[] xPositions = [newLeft1, newLeft2, newLeft3];
+                double[] yPositions = [newTop1, newTop2, newTop3];
 
+
+                assign_New_Positions(xPositions, yPositions, random);
 
                 int randomColorIndex = random.Next(0, buttonColors.Length);
 
@@ -150,53 +135,82 @@ namespace Interactives_Kinder_Spiel
                 changeLights(buttonColors[randomColorIndex]);
                 this.currentColor = buttonColors[randomColorIndex];
             }
-            else if (gameMode == "Other")
+        }
+
+        private void OnHideButtonTimerTick(object sender, EventArgs e)
+        {
+            movingButton.Visibility = movingButton.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        private void OnButtonStyleTimerTick(object sender, EventArgs e)
+        {
+            Random random = new Random();
+
+            int[] sizeValues = sizeDifficulties[Difficulty];
+
+            double newWidth = random.Next(sizeValues[0], sizeValues[1]);
+            double newHeight = random.Next(sizeValues[0], sizeValues[1]);
+
+
+            //double newLeft = random.Next(50, 300);
+            //double newTop = random.Next(30, 300);
+
+
+            // Apply the new size and position
+            movingButton.Width = newWidth;
+            movingButton.Height = newHeight;
+
+            double newLeft = random.Next(150, 400);
+            double newTop = random.Next(30, 180);
+
+            movingButton.Margin = new Thickness(newLeft, newTop, 0, 0);
+
+
+            int randomColorIndex = random.Next(0, buttonColors.Length);
+
+            if (randomColorIndex == previousRandomColor)
             {
-                Random random = new Random();
-
-                int[] sizeValues = sizeDifficulties[Difficulty];
-
-                double newWidth = random.Next(sizeValues[0], sizeValues[1]);
-                double newHeight = random.Next(sizeValues[0], sizeValues[1]);
-
-
-                //double newLeft = random.Next(50, 300);
-                //double newTop = random.Next(30, 300);
-
-
-                // Apply the new size and position
-                movingButton.Width = newWidth;
-                movingButton.Height = newHeight;
-
-                double newLeft = random.Next(150, 400);
-                double newTop = random.Next(30, 180);
-
-                movingButton.Margin = new Thickness(newLeft, newTop, 0, 0);
-
-
-                int randomColorIndex = random.Next(0, buttonColors.Length);
-
-                if (randomColorIndex == previousRandomColor)
+                if (randomColorIndex == buttonColors.Length - 1)
                 {
-                    if (randomColorIndex == buttonColors.Length - 1)
-                    {
-                        randomColorIndex--;
-                    }
-                    else
-                    {
-                        randomColorIndex++;
-                    }
+                    randomColorIndex--;
                 }
-
-                previousRandomColor = randomColorIndex;
-
-                movingButton.Background = buttonColors[randomColorIndex];
-                movingButton.Tag = randomColorIndex;
+                else
+                {
+                    randomColorIndex++;
+                }
             }
-            else
-            {
-                throw new Exception("Shut the Fuck up an go die in a ditch");
-            }
+
+            previousRandomColor = randomColorIndex;
+
+            movingButton.Background = buttonColors[randomColorIndex];
+            movingButton.Tag = randomColorIndex;
+        }
+
+        private void assign_New_Positions(double[] x_Axis, double[] y_Axis, Random random)
+        {
+            int xIndex;
+            int yIndex;
+
+            xIndex = random.Next(0, x_Axis.Length - 1);
+            yIndex = random.Next(0, y_Axis.Length - 1);
+
+            movingButton_Red.Margin = new Thickness(x_Axis[xIndex], y_Axis[yIndex], 0, 0);
+            x_Axis = x_Axis.Where((val, idx) => idx != xIndex).ToArray();
+            y_Axis = y_Axis.Where((val, idx) => idx != yIndex).ToArray();
+
+            xIndex = random.Next(0, x_Axis.Length - 1);
+            yIndex = random.Next(0, y_Axis.Length - 1);
+
+            movingButton_Orange.Margin = new Thickness(x_Axis[xIndex], y_Axis[yIndex], 0, 0);
+            x_Axis = x_Axis.Where((val, idx) => idx != xIndex).ToArray();
+            y_Axis = y_Axis.Where((val, idx) => idx != yIndex).ToArray();
+
+            xIndex = random.Next(0, x_Axis.Length - 1);
+            yIndex = random.Next(0, y_Axis.Length - 1);
+
+            movingButton_Green.Margin = new Thickness(x_Axis[xIndex], y_Axis[yIndex], 0, 0);
+            x_Axis = x_Axis.Where((val, idx) => idx != xIndex).ToArray();
+            y_Axis = y_Axis.Where((val, idx) => idx != yIndex).ToArray();
         }
 
         private void Button_Clicked(object sender, RoutedEventArgs e)
@@ -354,13 +368,13 @@ namespace Interactives_Kinder_Spiel
                     this.botLight.Fill = Brushes.DarkGreen;
 
                 }
-                else if (color == Brushes.Yellow)
+                else if (color == Brushes.Goldenrod)
                 {
                     this.topLight.Fill = Brushes.DarkRed;
                     this.midLight.Fill = Brushes.Goldenrod;
                     this.botLight.Fill = Brushes.DarkGreen;
                 }
-                else if (color == Brushes.Green)
+                else if (color == Brushes.LightGreen)
                 {
                     this.topLight.Fill = Brushes.DarkRed;
                     this.midLight.Fill = Brushes.DarkGoldenrod;

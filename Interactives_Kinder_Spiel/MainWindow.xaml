@@ -29,17 +29,17 @@
                     HorizontalAlignment="Left"
                     Margin="40" >
                 <Rectangle x:Name="topLight" Fill="DarkRed" Canvas.Top="15" Canvas.Left="20"
-               RadiusX="50" RadiusY="50" Width="50" Height="50" />
+                           RadiusX="50" RadiusY="50" Width="50" Height="50" />
                 <Rectangle x:Name="midLight" Fill="DarkGoldenrod" Canvas.Top="75" Canvas.Left="20"
-               RadiusX="50" RadiusY="50" Width="50" Height="50" />
+                           RadiusX="50" RadiusY="50" Width="50" Height="50" />
                 <Rectangle x:Name="botLight" Fill="DarkGreen" Canvas.Top="135" Canvas.Left="20"
-               RadiusX="50" RadiusY="50" Width="50" Height="50" />
+                           RadiusX="50" RadiusY="50" Width="50" Height="50" />
 				<TextBox x:Name="TestBox" Background="White" Text="Teppe" />
 			</Canvas>
 			<StackPanel x:Name="TabPanel">
-            <Button x:Name="movingButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked" />
-            <Button x:Name="movingButton_Red" Background="Red"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked_Red" Visibility="Hidden"/>
-            <Button x:Name="movingButton_Orange" Background="Goldenrod"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked_Orange" Visibility="Hidden" />
+                <Button x:Name="movingButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked" />
+                <Button x:Name="movingButton_Red" Background="Red" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked_Red" Visibility="Hidden"/>
+                <Button x:Name="movingButton_Orange" Background="Goldenrod" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked_Orange" Visibility="Hidden" />
                 <Button x:Name="movingButton_Green" Background="LightGreen" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="50" Click="Button_Clicked_Green" Visibility="Hidden" />
 			</StackPanel>
 		</DockPanel>
