@@ -1,15 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Drawing;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace Interactives_Kinder_Spiel
@@ -25,7 +17,7 @@ namespace Interactives_Kinder_Spiel
 
         private int gameTick = 0;
 
-        private Brush[] buttonColors = [Brushes.LightGreen, Brushes.Goldenrod, Brushes.Red];
+        private Brush[] buttonColors = [Brushes.LightGreen, Brushes.Yellow, Brushes.Red];
 
         private int previousRandomColor = -1;
 
@@ -52,14 +44,7 @@ namespace Interactives_Kinder_Spiel
             gameTimer.Interval = TimeSpan.FromSeconds(2);
             gameTimer.Tick += OnGameTimerTick;
 
-            buttonStyleTimer.Interval = TimeSpan.FromSeconds(2);
-            buttonStyleTimer.Tick += OnButtonStyleTimerTick;
-            //buttonStyleTimer.Start();
-
-
-            hideButtonTimer.Interval = TimeSpan.FromSeconds(1); // Trigger every second
-            hideButtonTimer.Tick += OnHideButtonTimerTick;
-            //hideButtonTimer.Start();
+            ChangeGame_Traffic();
         }
 
         private void OnGameTimerTick(object sender, EventArgs e)
@@ -72,7 +57,6 @@ namespace Interactives_Kinder_Spiel
             gameTick++;
 
             // Hiding of Buttons
-            movingButton.Visibility = movingButton.Visibility == Visibility.Hidden ? Visibility.Collapsed : Visibility.Collapsed;
             movingButton_Red.Visibility = movingButton_Red.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
             movingButton_Orange.Visibility = movingButton_Orange.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
             movingButton_Green.Visibility = movingButton_Green.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
@@ -125,55 +109,6 @@ namespace Interactives_Kinder_Spiel
             }
             changeLights(buttonColors[randomColorIndex]);
             this.currentColor = buttonColors[randomColorIndex];
-        }
-
-        private void OnHideButtonTimerTick(object sender, EventArgs e)
-        {
-            movingButton.Visibility = movingButton.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
-        }
-
-        private void OnButtonStyleTimerTick(object sender, EventArgs e)
-        {
-            Random random = new Random();
-
-            int[] sizeValues = sizeDifficulties[Difficulty];
-
-            double newWidth = random.Next(sizeValues[0], sizeValues[1]);
-            double newHeight = random.Next(sizeValues[0], sizeValues[1]);
-
-
-            //double newLeft = random.Next(50, 300);
-            //double newTop = random.Next(30, 300);
-
-
-            // Apply the new size and position
-            movingButton.Width = newWidth;
-            movingButton.Height = newHeight;
-
-            double newLeft = random.Next(150, 400);
-            double newTop = random.Next(30, 180);
-
-            movingButton.Margin = new Thickness(newLeft, newTop, 0, 0);
-
-
-            int randomColorIndex = random.Next(0, buttonColors.Length);
-
-            if (randomColorIndex == previousRandomColor)
-            {
-                if (randomColorIndex == buttonColors.Length - 1)
-                {
-                    randomColorIndex--;
-                }
-                else
-                {
-                    randomColorIndex++;
-                }
-            }
-
-            previousRandomColor = randomColorIndex;
-
-            movingButton.Background = buttonColors[randomColorIndex];
-            movingButton.Tag = randomColorIndex;
         }
 
         private void assign_New_Positions(double[] x_Axis, double[] y_Axis, Random random)
@@ -245,13 +180,7 @@ namespace Interactives_Kinder_Spiel
             {
                 if (this.currentColor == colorButton.Background)
                 {
-                    TestBox.Text = "ROOOOOT";
-                    correct_Button_Pressed();
-
-                }
-                else
-                {
-                    TestBox.Text = "FALSCH";
+                    Correct_Button_Pressed();
                 }
             }
         }
@@ -262,12 +191,7 @@ namespace Interactives_Kinder_Spiel
 			{
                 if (this.currentColor == colorButton.Background)
                 {
-                    TestBox.Text = "OLOOONGE";
-                    correct_Button_Pressed();
-                }
-                else
-                {
-                    TestBox.Text = "FALSCH";
+                    Correct_Button_Pressed();
                 }
 			}
 		}
@@ -278,17 +202,12 @@ namespace Interactives_Kinder_Spiel
 			{
 				if (this.currentColor == colorButton.Background)
 				{
-					TestBox.Text = "GREEEN";
-                    correct_Button_Pressed();
-                }
-                else
-                {
-                    TestBox.Text = "FALSCH";
+                    Correct_Button_Pressed();
                 }
             }
 		}
 
-        private void correct_Button_Pressed()
+        private void Correct_Button_Pressed()
         {
             if (clickedCounter == 0)
             {
@@ -339,37 +258,17 @@ namespace Interactives_Kinder_Spiel
             e.Handled = true;
         }
 
-        private void ChangeGame_Traffic(object sender, RoutedEventArgs e)
+        private void ChangeGame_Traffic()
         {
             this.gameMode = "TrafficLight";
             this.movingButton_Red.Visibility = Visibility.Visible;
             this.movingButton_Orange.Visibility = Visibility.Visible;
             this.movingButton_Green.Visibility = Visibility.Visible;
-            this.movingButton.Visibility = Visibility.Collapsed;
 
             gameTimer.Start();
 
             buttonStyleTimer.Stop();
             hideButtonTimer.Stop();
-
-            e.Handled = true;
-
-
-        }
-
-        private void ChangeGame_Other(object sender, RoutedEventArgs e)
-        {
-            this.gameMode = "Other";
-            this.movingButton_Red.Visibility = Visibility.Collapsed;
-            this.movingButton_Orange.Visibility = Visibility.Collapsed;
-            this.movingButton_Green.Visibility = Visibility.Collapsed;
-            this.movingButton.Visibility = Visibility.Visible;
-            buttonStyleTimer.Start();
-            hideButtonTimer.Start();
-
-            gameTimer.Stop();
-
-            e.Handled = true;
         }
 
         private void changeLights(Brush color)
@@ -384,10 +283,10 @@ namespace Interactives_Kinder_Spiel
                     this.botLight.Fill = Brushes.DarkGreen;
 
                 }
-                else if (color == Brushes.Goldenrod)
+                else if (color == Brushes.Yellow)
                 {
                     this.topLight.Fill = Brushes.DarkRed;
-                    this.midLight.Fill = Brushes.Goldenrod;
+                    this.midLight.Fill = Brushes.Yellow;
                     this.botLight.Fill = Brushes.DarkGreen;
                 }
                 else if (color == Brushes.LightGreen)
