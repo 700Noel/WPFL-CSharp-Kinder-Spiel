@@ -21,8 +21,6 @@ namespace Interactives_Kinder_Spiel
 
         private int previousRandomColor = -1;
 
-        private int clickedCounter = 0;
-
         private String gameMode = "TrafficLight";
 
         private Brush currentColor;
@@ -44,15 +42,15 @@ namespace Interactives_Kinder_Spiel
             gameTimer.Interval = TimeSpan.FromSeconds(2);
             gameTimer.Tick += OnGameTimerTick;
 
-            ChangeGame_Traffic();
+            ChangeGameTraffic();
         }
 
         private void OnGameTimerTick(object sender, EventArgs e)
         {
-            dispatcherTimer_Tick();
+            DispatcherTimerTick();
         }
 
-        private void dispatcherTimer_Tick() //object sender, EventArgs e
+        private void DispatcherTimerTick() //object sender, EventArgs e
         {
             gameTick++;
 
@@ -92,7 +90,7 @@ namespace Interactives_Kinder_Spiel
             double[] yPositions = [newTop1, newTop2, newTop3];
 
             // Assign new Button Positions
-            assign_New_Positions(xPositions, yPositions, random);
+            AssignNewPositions(xPositions, yPositions, random);
 
             int randomColorIndex = random.Next(0, buttonColors.Length);
 
@@ -107,11 +105,12 @@ namespace Interactives_Kinder_Spiel
                     randomColorIndex++;
                 }
             }
-            changeLights(buttonColors[randomColorIndex]);
+            previousRandomColor = randomColorIndex;
+            ChangeLights(buttonColors[randomColorIndex]);
             this.currentColor = buttonColors[randomColorIndex];
         }
 
-        private void assign_New_Positions(double[] x_Axis, double[] y_Axis, Random random)
+        private void AssignNewPositions(double[] x_Axis, double[] y_Axis, Random random)
         {
             int xIndex;
             int yIndex;
@@ -138,100 +137,83 @@ namespace Interactives_Kinder_Spiel
             y_Axis = y_Axis.Where((val, idx) => idx != yIndex).ToArray();
         }
 
-        private void Button_Clicked(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button colorButton)
-            {
-                if (clickedCounter == 0)
-                {
-                    stopwatch.Start();
-                }
-
-                clickedCounter++;
-                pbStatus.Value = clickedCounter;
-
-                if (clickedCounter == 10)
-                {
-                    stopwatch.Stop();
-                    TimeSpan elapsed = stopwatch.Elapsed;
-
-                    MessageBox.Show($"Maximum clicks reached!\nTime taken: {elapsed.Seconds} seconds and {elapsed.Milliseconds} milliseconds.");
-
-                    clickedCounter = 0;
-                    pbStatus.Value = 0;
-                    stopwatch.Reset();
-                }
-
-                /*
-                // Get the ID from the Tag property
-                int id = (int)colorButton.Tag;
-                if(id == 0)
-                {
-                    greenClickedCounter++;
-                }
-                */
-                changeLights(colorButton.Background);
-            }
-        }
-
-        private void Button_Clicked_Red(object sender, RoutedEventArgs e)
+        private void ButtonClickedRed(object sender, RoutedEventArgs e)
         {
             if (sender is Button colorButton)
             {
                 if (this.currentColor == colorButton.Background)
                 {
-                    Correct_Button_Pressed();
+                    CorrectButtonPressed();
+                }
+                else
+                {
+                    IncorrectButtonPressed();
                 }
             }
         }
 
-        private void Button_Clicked_Orange(object sender, RoutedEventArgs e)
+        private void ButtonClickedOrange(object sender, RoutedEventArgs e)
         {
 			if (sender is Button colorButton)
 			{
                 if (this.currentColor == colorButton.Background)
                 {
-                    Correct_Button_Pressed();
+                    CorrectButtonPressed();
                 }
-			}
+                else
+                {
+                    IncorrectButtonPressed();
+                }
+            }
 		}
 
-        private void Button_Clicked_Green(object sender, RoutedEventArgs e)
+        private void ButtonClickedGreen(object sender, RoutedEventArgs e)
         {
 			if (sender is Button colorButton)
 			{
 				if (this.currentColor == colorButton.Background)
 				{
-                    Correct_Button_Pressed();
+                    CorrectButtonPressed();
+                } 
+                else
+                {
+                    IncorrectButtonPressed();
                 }
             }
 		}
 
-        private void Correct_Button_Pressed()
+        private void IncorrectButtonPressed()
         {
-            if (clickedCounter == 0)
+            if (pbStatus.Value > 0)
+            {
+                pbStatus.Value--;
+            }
+            DispatcherTimerTick();
+        }
+
+        private void CorrectButtonPressed()
+        {
+            if (pbStatus.Value == 0)
             {
                 stopwatch.Start();
             }
 
-            clickedCounter++;
-            pbStatus.Value = clickedCounter;
-            dispatcherTimer_Tick();
+            pbStatus.Value++;
+            DispatcherTimerTick();
 
-            if (clickedCounter == 10)
+            if (pbStatus.Value == 10)
             {
                 stopwatch.Stop();
                 TimeSpan elapsed = stopwatch.Elapsed;
 
                 MessageBox.Show($"Maximum clicks reached!\nTime taken: {elapsed.Seconds} seconds and {elapsed.Milliseconds} milliseconds.");
 
-                clickedCounter = 0;
                 pbStatus.Value = 0;
                 stopwatch.Reset();
             }
         }
 
-        private void ChangeMode_Easy(object sender, RoutedEventArgs e)
+        private void ChangeModeEasy(object sender, RoutedEventArgs e)
         {
             Difficulty = Difficulty.Easy;
             EasyMode.IsChecked = true;
@@ -240,7 +222,7 @@ namespace Interactives_Kinder_Spiel
             e.Handled = true;
         }
 
-        private void ChangeMode_Medium(object sender, RoutedEventArgs e)
+        private void ChangeModeMedium(object sender, RoutedEventArgs e)
         {
             Difficulty = Difficulty.Medium;
             EasyMode.IsChecked = false;
@@ -249,7 +231,7 @@ namespace Interactives_Kinder_Spiel
             e.Handled = true;
         }
 
-        private void ChangeMode_Hard(object sender, RoutedEventArgs e)
+        private void ChangeModeHard(object sender, RoutedEventArgs e)
         {
             Difficulty = Difficulty.Hard;
             EasyMode.IsChecked = false;
@@ -297,9 +279,10 @@ namespace Interactives_Kinder_Spiel
                     }
                 }
             }
+        }
 
 
-        private void ChangeGame_Traffic()
+        private void ChangeGameTraffic()
         {
             this.gameMode = "TrafficLight";
             this.movingButton_Red.Visibility = Visibility.Visible;
@@ -312,7 +295,7 @@ namespace Interactives_Kinder_Spiel
             hideButtonTimer.Stop();
         }
 
-        private void changeLights(Brush color)
+        private void ChangeLights(Brush color)
         {
             // Only change the Lights after every second gameTick
             if (color != null && gameTick % 2 == 0)
